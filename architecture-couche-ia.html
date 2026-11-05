@@ -1,0 +1,242 @@
+<title>Couche IA d'AHEAD</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout : une page de référence, un grand schéma de flux lisible de gauche à droite, puis le détail par étape. */
+  :root {
+    --bg: #F6F7F4;
+    --surface: #FFFFFF;
+    --fg: #1B2220;
+    --muted: #5B6662;
+    --line: #8C9792;
+    --accent: #9A5F0C;
+    --accent-tint: #F4E7D1;
+    --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151A19; --surface: #1E2523; --fg: #E6EBE8; --muted: #9AA6A1;
+      --line: #74807B; --accent: #E2A649; --accent-tint: #3A2D18; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151A19; --surface: #1E2523; --fg: #E6EBE8; --muted: #9AA6A1;
+    --line: #74807B; --accent: #E2A649; --accent-tint: #3A2D18; color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg); color: var(--fg); font-family: var(--font-body);
+    font-size: 15px; line-height: 1.55;
+  }
+  .page {
+    max-width: 1160px; margin: 0 auto;
+    padding-block: 40px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid; gap: 28px;
+  }
+  header { display: grid; gap: 8px; max-width: 68ch; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0; text-wrap: balance; }
+  h2 { font-size: 19px; margin: 0; text-wrap: balance; }
+  p { margin: 0; }
+  .lead { color: var(--muted); }
+  .principe { font-weight: 600; }
+
+  .legende { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; color: var(--muted); }
+  .legende span { display: inline-flex; align-items: center; gap: 8px; }
+  .pastille { width: 18px; height: 12px; border-radius: 3px; display: inline-block; }
+  .pastille.mine { background: var(--accent-tint); border: 1.5px solid var(--accent); }
+  .pastille.autre { background: var(--surface); border: 1.5px dashed var(--line); }
+
+  figure { margin: 0; display: grid; gap: 12px; }
+  .schema { overflow-x: auto; background: var(--surface); border: 1px solid color-mix(in srgb, var(--line) 40%, transparent); border-radius: 10px; padding: 12px; }
+  .schema svg { display: block; width: 100%; min-width: 900px; height: auto; color: var(--line); }
+  figcaption { font-size: 13px; color: var(--muted); max-width: 80ch; }
+
+  svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  svg .mine { fill: var(--accent-tint); stroke: var(--accent); stroke-width: 1.8; }
+  svg .bande { fill: var(--bg); stroke: var(--line); stroke-width: 1; }
+  svg .t { fill: var(--fg); font-family: var(--font-body); font-size: 13px; font-weight: 700; }
+  svg .s { fill: var(--muted); font-family: var(--font-body); font-size: 11.5px; }
+  svg .lbl { fill: var(--muted); font-family: var(--font-mono); font-size: 11px; }
+  svg .bt { fill: var(--fg); font-family: var(--font-body); font-size: 12.5px; }
+  svg .flux { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  svg .tir { stroke-dasharray: 5 4; }
+
+  .etapes { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid color-mix(in srgb, var(--line) 35%, transparent); }
+  th { font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 500; }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  td.outil { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+  section { display: grid; gap: 14px; }
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">AHEAD · partie IA · Jennifer</div>
+    <h1>Architecture de la couche IA</h1>
+    <p class="lead">Des annonces collectées par Élie jusqu'aux recommandations et à l'assistant, avec ce qui est vérifié à chaque étape.</p>
+    <p class="principe">Le LLM propose, le code vérifie, l'humain valide.</p>
+  </header>
+
+  <div class="legende">
+    <span><i class="pastille mine"></i>Partie IA (Jennifer)</span>
+    <span><i class="pastille autre"></i>Partenaires : Élie, Luc, Steve, l'équipe</span>
+    <span>Trait pointillé : cas à part (écarté, à vérifier)</span>
+  </div>
+
+  <figure>
+    <div class="schema">
+      <svg viewBox="0 0 1130 600" role="img" aria-label="Les annonces collectées passent par le tri, l'extraction, la vérification, la classification et la détection des doublons, puis par une validation humaine avant publication. Les fiches publiées et le profil de l'utilisateur alimentent la recommandation, qui nourrit l'assistant et les notifications de la mascotte.">
+        <defs>
+          <marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+
+        <!-- Ligne 1 : chaîne de traitement -->
+        <rect class="box" x="20" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="82" y="88" text-anchor="middle">Collecte</text>
+        <text class="s" x="82" y="106" text-anchor="middle">Élie</text>
+        <text class="s" x="82" y="121" text-anchor="middle">texte, source, date</text>
+
+        <rect class="mine" x="180" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="242" y="88" text-anchor="middle">1. Tri</text>
+        <text class="s" x="242" y="106" text-anchor="middle">est-ce un</text>
+        <text class="s" x="242" y="121" text-anchor="middle">événement ?</text>
+
+        <rect class="mine" x="340" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="402" y="88" text-anchor="middle">2. Extraction</text>
+        <text class="s" x="402" y="106" text-anchor="middle">fiche + preuve</text>
+        <text class="s" x="402" y="121" text-anchor="middle">pour chaque champ</text>
+
+        <rect class="mine" x="500" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="562" y="88" text-anchor="middle">3. Vérification</text>
+        <text class="s" x="562" y="106" text-anchor="middle">par le code :</text>
+        <text class="s" x="562" y="121" text-anchor="middle">preuves, dates</text>
+
+        <rect class="mine" x="660" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="722" y="88" text-anchor="middle">4. Classification</text>
+        <text class="s" x="722" y="106" text-anchor="middle">un ou plusieurs</text>
+        <text class="s" x="722" y="121" text-anchor="middle">thèmes</text>
+
+        <rect class="mine" x="820" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="882" y="88" text-anchor="middle">5. Doublons</text>
+        <text class="s" x="882" y="106" text-anchor="middle">règles, puis</text>
+        <text class="s" x="882" y="121" text-anchor="middle">embeddings</text>
+
+        <rect class="box" x="980" y="60" width="124" height="76" rx="8"/>
+        <text class="t" x="1042" y="88" text-anchor="middle">Validation</text>
+        <text class="s" x="1042" y="106" text-anchor="middle">humaine</text>
+        <text class="s" x="1042" y="121" text-anchor="middle">équipe AHEAD</text>
+
+        <line class="flux" x1="144" y1="98" x2="178" y2="98" marker-end="url(#fl)"/>
+        <line class="flux" x1="304" y1="98" x2="338" y2="98" marker-end="url(#fl)"/>
+        <line class="flux" x1="464" y1="98" x2="498" y2="98" marker-end="url(#fl)"/>
+        <line class="flux" x1="624" y1="98" x2="658" y2="98" marker-end="url(#fl)"/>
+        <line class="flux" x1="784" y1="98" x2="818" y2="98" marker-end="url(#fl)"/>
+        <line class="flux" x1="944" y1="98" x2="978" y2="98" marker-end="url(#fl)"/>
+
+        <!-- Cas à part -->
+        <line class="flux tir" x1="242" y1="136" x2="242" y2="184" marker-end="url(#fl)"/>
+        <text class="lbl" x="242" y="202" text-anchor="middle">hors sujet : écarté</text>
+
+        <path class="flux tir" d="M562 136 V180 H1010 V139" marker-end="url(#fl)"/>
+        <line class="flux tir" x1="882" y1="136" x2="882" y2="180"/>
+        <text class="lbl" x="570" y="172">points à vérifier</text>
+        <text class="lbl" x="876" y="160" text-anchor="end">doublons incertains</text>
+
+        <line class="flux" x1="1060" y1="136" x2="1060" y2="237" marker-end="url(#fl)"/>
+        <text class="lbl" x="1066" y="200">publie</text>
+
+        <!-- Ligne 2 : données et recommandation -->
+        <rect class="mine" x="340" y="240" width="124" height="76" rx="8"/>
+        <text class="t" x="402" y="268" text-anchor="middle">Profil</text>
+        <text class="s" x="402" y="286" text-anchor="middle">déclaré, importé</text>
+        <text class="s" x="402" y="301" text-anchor="middle">avec accord, observé</text>
+
+        <rect class="mine" x="660" y="240" width="124" height="76" rx="8"/>
+        <text class="t" x="722" y="268" text-anchor="middle">Recommandation</text>
+        <text class="s" x="722" y="286" text-anchor="middle">contraintes, puis</text>
+        <text class="s" x="722" y="301" text-anchor="middle">score et raisons</text>
+
+        <rect class="box" x="980" y="240" width="124" height="76" rx="8"/>
+        <text class="t" x="1042" y="268" text-anchor="middle">Fiches publiées</text>
+        <text class="s" x="1042" y="286" text-anchor="middle">base de Luc</text>
+        <text class="s" x="1042" y="301" text-anchor="middle">PostgreSQL</text>
+
+        <line class="flux" x1="980" y1="270" x2="787" y2="270" marker-end="url(#fl)"/>
+        <text class="lbl" x="882" y="262" text-anchor="middle">événements à venir</text>
+        <line class="flux" x1="464" y1="278" x2="657" y2="278" marker-end="url(#fl)"/>
+        <text class="lbl" x="562" y="270" text-anchor="middle">contraintes, préférences</text>
+
+        <!-- Ligne 3 : ce que voit l'utilisateur -->
+        <rect class="box" x="20" y="400" width="284" height="76" rx="8"/>
+        <text class="t" x="162" y="428" text-anchor="middle">Utilisateur</text>
+        <text class="s" x="162" y="446" text-anchor="middle">interface de Steve</text>
+        <text class="s" x="162" y="461" text-anchor="middle">web et mobile</text>
+
+        <rect class="mine" x="500" y="400" width="124" height="76" rx="8"/>
+        <text class="t" x="562" y="428" text-anchor="middle">Notifications</text>
+        <text class="s" x="562" y="446" text-anchor="middle">voix de la mascotte</text>
+        <text class="s" x="562" y="461" text-anchor="middle">fréquence limitée</text>
+
+        <rect class="mine" x="660" y="400" width="284" height="76" rx="8"/>
+        <text class="t" x="802" y="428" text-anchor="middle">Assistant IA (V1)</text>
+        <text class="s" x="802" y="446" text-anchor="middle">RAG + outils, cite ses sources</text>
+        <text class="s" x="802" y="461" text-anchor="middle">dit quand il ne sait pas</text>
+
+        <line class="flux" x1="722" y1="316" x2="722" y2="397" marker-end="url(#fl)"/>
+        <text class="lbl" x="730" y="362">sélection + raisons</text>
+
+        <path class="flux" d="M660 300 H562 V397" marker-end="url(#fl)"/>
+        <text class="lbl" x="568" y="352">proactive</text>
+
+        <path class="flux" d="M1042 316 V438 H947" marker-end="url(#fl)"/>
+        <text class="lbl" x="994" y="430" text-anchor="middle">fiches citées</text>
+
+        <line class="flux" x1="500" y1="438" x2="307" y2="438" marker-end="url(#fl)"/>
+        <text class="lbl" x="403" y="430" text-anchor="middle">message mascotte</text>
+
+        <path class="flux" d="M802 476 V500 H162 V479" marker-start="url(#fl)" marker-end="url(#fl)"/>
+        <text class="lbl" x="460" y="494" text-anchor="middle">questions / réponses sourcées</text>
+
+        <path class="flux" d="M240 400 V278 H337" marker-end="url(#fl)"/>
+        <text class="lbl" x="246" y="350">déclare, importe,</text>
+        <text class="lbl" x="246" y="364">utilise AHEAD</text>
+
+        <!-- Transversal -->
+        <rect class="bande" x="20" y="530" width="1084" height="46" rx="8"/>
+        <text class="bt" x="562" y="558" text-anchor="middle">En continu : évaluation sur le jeu de référence · suivi des coûts et des délais · texte collecté traité comme une donnée, jamais comme une instruction</text>
+      </svg>
+    </div>
+    <figcaption>Chaque annonce traverse cinq étapes IA. Ce qui est douteux (preuve introuvable, date incohérente, doublon incertain) part vers une personne avant publication. Côté utilisateur, la recommandation part des fiches publiées et du profil ; l'assistant et la mascotte s'appuient dessus. Pour la V1, l'assistant démarre sur des fiches validées à la main, sans attendre la collecte.</figcaption>
+  </figure>
+
+  <section>
+    <h2>Le détail par étape</h2>
+    <div class="etapes">
+      <table>
+        <thead><tr><th>Étape</th><th>Ce qu'elle fait</th><th>Ce qu'on vérifie</th><th>Outils</th></tr></thead>
+        <tbody>
+          <tr><td>1. Tri</td><td>Écarte ce qui n'est pas une annonce d'événement</td><td>Peu d'événements écartés à tort</td><td class="outil">LLM, prompt court</td></tr>
+          <tr><td>2. Extraction</td><td>Remplit la fiche : nom, dates, lieu, format, organisateur, prix, chacun avec sa citation</td><td>Champs exacts, rien d'inventé</td><td class="outil">LLM, sortie structurée, Pydantic</td></tr>
+          <tr><td>3. Vérification</td><td>Contrôle que chaque preuve existe dans le texte, que les dates sont valides et à venir, signale l'année déduite</td><td>Aucune erreur ne passe sans alerte</td><td class="outil">Python, rapidfuzz, dateparser</td></tr>
+          <tr><td>4. Classification</td><td>Attribue un ou plusieurs thèmes d'une liste fermée, ou « Autre »</td><td>Précision et rappel par thème</td><td class="outil">LLM, liste de thèmes documentée</td></tr>
+          <tr><td>5. Doublons</td><td>Rapproche les annonces d'un même événement, distingue les éditions</td><td>Ni doublon oublié, ni fusion à tort</td><td class="outil">règles, pg_trgm, embeddings</td></tr>
+          <tr><td>Profil</td><td>Réunit ce que l'utilisateur déclare, importe avec son accord (CV, archive LinkedIn) et fait sur AHEAD</td><td>Consentement, droit de modifier</td><td class="outil">Django, PostgreSQL</td></tr>
+          <tr><td>Recommandation</td><td>Filtre les contraintes (dates, format, déplacement), puis classe selon les préférences avec les raisons</td><td>Contraintes respectées, intérêt réel</td><td class="outil">Python, score pondéré</td></tr>
+          <tr><td>Assistant</td><td>Comprend la demande, pose des questions, cherche dans les fiches, explique en citant ses sources</td><td>Fidèle, utile, sourcé</td><td class="outil">LLM, outils, RAG, streaming</td></tr>
+          <tr><td>Notifications</td><td>Propose un événement pertinent, dans la voix de la mascotte, à fréquence limitée</td><td>Taux d'ouverture, désabonnements</td><td class="outil">Celery, tests A/B</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
