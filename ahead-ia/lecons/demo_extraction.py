@@ -23,7 +23,7 @@ from pydantic import BaseModel, Field
 
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
-# Si un modèle est surchargé, on passe au suivant (modèles de secours).
+# (modèles de secours)
 MODELES = ["gemini-flash-latest", "gemini-3.5-flash", "gemini-flash-lite-latest"]
 DATE_COLLECTE = date(2026, 10, 31)  # fournie par Élie avec chaque contenu
 
@@ -34,7 +34,7 @@ THEMES = Literal[
 ]
 
 
-# ---------- 1. Le format de la fiche (ce que le LLM doit remplir) ----------
+# 1. Le format de la fiche (ce que le LLM doit remplir) 
 
 class Champ(BaseModel):
     valeur: str | None = Field(description="La valeur, ou null si le texte ne la donne pas.")
@@ -84,7 +84,7 @@ def extraire(client, annonce):
     raise RuntimeError("Tous les modèles sont surchargés. Relance dans quelques minutes.")
 
 
-# ---------- 2. Le code VÉRIFIE ----------
+# 2. Le code VÉRIFIE
 
 def normaliser(texte):
     return " ".join(texte.lower().replace("’", "'").split())

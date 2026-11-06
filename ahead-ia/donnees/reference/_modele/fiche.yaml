@@ -1,0 +1,19 @@
+# Fiche de référence, remplie et corrigée à la main.
+# Règle d'or : n'écrire que ce que l'annonce dit vraiment. Sinon, laisser null.
+
+source_url: https://exemple.org/page-de-l-annonce
+date_collecte: 2026-11-06   # le jour où vous avez copié l'annonce
+langue: fr                  # fr, en ou autre
+
+fiche:
+  est_un_evenement: true    # false pour une annonce piège (promo, compte rendu passé...)
+  nom: null
+  date_debut: null          # format AAAA-MM-JJ
+  date_fin: null            # même jour que date_debut si l'événement dure un jour
+  lieu: null                # « Ville, Pays » ; null si uniquement en ligne
+  format: null              # présentiel, en ligne ou hybride
+  organisateur: null
+  prix: null                # ex. 15 000 FCFA, 50 €, gratuit ; null si non indiqué
+  themes: []                # un ou plusieurs thèmes de la liste du README
+
+notes: ""                   # doutes, ambiguïtés, questions pour M. Leonel
